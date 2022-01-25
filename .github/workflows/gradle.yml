@@ -30,3 +30,32 @@ jobs:
     
     - name: Build with Gradle
       run: ./gradlew clean build
+      
+    # 빌드한 jar 파일을 담을 디렉토리 생성
+    - name: Create directory for delivery
+      run: mkdir deploy
+      
+    # jar 파일 복사
+    - name: Copy jar file
+      run: cp ./build/libs/*.jar ./deploy/
+      
+    # 파일 압축
+    - name: Create zip file
+      run: zip -r -qq -j ./letshadow.zip ./deploy
+      
+    # s3로 zip 파일 전송
+    - name: Send zip file to AWS S3 bucket
+      env:
+        AWS_ACCESS_KEY_ID: ${{'{{' }} secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{'{{' }} secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 cp \
+        --region ap-northease-2 \
+        --acl private \
+        ./letshadow.zip s3://letshadow-deployer
+
+
+    
+      
+      
+      
