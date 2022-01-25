@@ -52,7 +52,7 @@ jobs:
         aws s3 cp \
         --region ap-northease-2 \
         --acl private \
-        ./letshadow.zip s3://letshadow-deployer
+        ./letshadow.zip s3://letshadow-deployer/
 
 
     
